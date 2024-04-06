@@ -1,0 +1,67 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  h1 {
+    @apply text-4xl lg:text-7xl font-black;
+    text-transform: uppercase;
+  }
+  h2 {
+    @apply text-2xl lg:text-4xl font-bold;
+  }
+  h3 {
+    @apply text-xl lg:text-3xl font-bold;
+  }
+  h4 {
+    @apply text-xl font-bold;
+  }
+  h4 {
+    @apply text-lg font-bold;
+  }
+}
+
+@font-face {
+  font-family: 'w95fa';
+  font-weight: 400 700;
+  src: url('../public/fonts/w95fa.woff2') format('woff2');
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  user-drag: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  font-family: 'w95fa', sans-serif;
+}
+
+body {
+  font-family: 'w95fa', sans-serif;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+button {
+  outline: none;
+}
+
+.zoom-on-hover-small {
+  @apply transition ease-in-out hover:scale-100 md:hover:scale-[1.02] lg:hover:scale-[1.02] duration-200 z-[90];
+}
+
+.zoom-on-hover-large {
+  @apply transition ease-in-out hover:scale-105 md:hover:scale-110 lg:hover:scale-110 duration-200 hover:shadow-md  z-[90];
+}
