@@ -7,6 +7,8 @@ import Light from './Light'
 import SpiritGuide from './SpiritGuide'
 import LevelCompletedMessage from './LevelCompletedMessages'
 import Enemies from './Enemies'
+import Snow from './Snow'
+import Credits from './Credits'
 
 export default function Level({
   currentLevel,
@@ -29,6 +31,7 @@ export default function Level({
   const [lightActive, setLightActive] = useState<boolean>(true)
   const [levelCompleted, setLevelCompleted] = useState<boolean>(false)
   const [pausedGame, setPausedGame] = useState<boolean>(false)
+  const [showCredits, setShowCredits] = useState<boolean>(false)
 
   function twoElementsCheckCollision(
     element1: HTMLElement,
@@ -51,6 +54,9 @@ export default function Level({
     const enemies = document.querySelectorAll(
       '.enemy'
     ) as NodeListOf<HTMLElement>
+    const snowPiles = document.querySelectorAll(
+      '.snow'
+    ) as NodeListOf<HTMLElement>
 
     let sofaCollisions = 0
     let enemyCollision = 0
@@ -64,6 +70,12 @@ export default function Level({
     enemies.forEach((enemy) => {
       if (twoElementsCheckCollision(hero, enemy)) {
         enemyCollision++
+      }
+    })
+
+    snowPiles.forEach((snow) => {
+      if (twoElementsCheckCollision(hero, snow)) {
+        snow.classList.add('invisible')
       }
     })
 
@@ -178,9 +190,23 @@ export default function Level({
     if (currentHealth <= 0) {
       setGameOver(true)
       setCurrentLevel(1)
-      setCurrentHealth(3)
+      setCurrentHealth(4)
     }
   }, [currentHealth, setCurrentLevel, setCurrentHealth])
+
+  useEffect(() => {
+    if (currentLevel === 5 && heroX > window.innerWidth - 150) {
+      setLevelCompleted(true)
+      setLightActive(false)
+    }
+    const creditsTimeout = setTimeout(() => {
+      setShowCredits(true)
+    }, 7000)
+
+    return () => {
+      clearTimeout(creditsTimeout)
+    }
+  }, [currentLevel, heroX])
 
   return (
     <>
@@ -188,26 +214,40 @@ export default function Level({
         currentLevel={currentLevel}
         currentHealth={currentHealth}
         objective={LevelCompletedMessage[currentLevel - 1].objective}
+        active={currentLevel < 5 && !levelCompleted}
       />
-      {currentLevel < 5 && (
-        <div>
-          {/*  <Postits active={!levelCompleted} /> */}
-          <Light active={!levelCompleted} />
-          <SpiritGuide
-            active={
-              levelCompleted && !lightActive && heroX > window.innerWidth - 300
-            }
-            message={LevelCompletedMessage[currentLevel - 1].message}
-            name={LevelCompletedMessage[currentLevel - 1].name}
-          />
-          <Enemies
-            amount={currentLevel < 3 ? currentLevel : 2}
-            active={!levelCompleted && !pausedGame}
-          />
-        </div>
-      )}
+      <div>
+        <Credits active={levelCompleted && currentLevel === 5 && showCredits} />
+        <Postits
+          active={levelCompleted && currentLevel === 5 && !showCredits}
+        />
+        <SpiritGuide
+          active={
+            levelCompleted &&
+            !lightActive &&
+            heroX > window.innerWidth - 300 &&
+            !showCredits
+          }
+          message={LevelCompletedMessage[currentLevel - 1].message}
+          name={LevelCompletedMessage[currentLevel - 1].name}
+        />
+        {currentLevel < 5 && (
+          <>
+            <Light active={!levelCompleted} />
+            <Enemies
+              amount={currentLevel < 3 ? currentLevel : 2}
+              active={!levelCompleted && !pausedGame}
+            />
+          </>
+        )}
+      </div>
 
-      <Hero heroX={heroX} heroY={heroY} heroDirection={heroDirection} />
+      <Hero
+        heroX={heroX}
+        heroY={heroY}
+        heroDirection={heroDirection}
+        currentLevel={currentLevel}
+      />
       <div
         className={`level bg-gray-800 h-[100vh] w-full flex flex-col grow justify-end bg-cover bg-center ${
           levelCompleted || currentLevel === 5 ? 'opacity-100' : 'opacity-30'
@@ -216,10 +256,12 @@ export default function Level({
           backgroundImage: `url('img/areas/level-${currentLevel}.webp')`
         }}
       >
-        {currentLevel < 5 && (
+        {currentLevel < 5 ? (
           <div>
             <Sofas amount={5 - currentLevel > 2 ? 6 - currentLevel : 3} />
           </div>
+        ) : (
+          <Snow />
         )}
       </div>
     </>

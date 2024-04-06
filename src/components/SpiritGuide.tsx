@@ -26,7 +26,8 @@ function SpiritGuide({
           active && 'slide-in'
         }`}
       >
-        <h4 className="text-white bg-black rounded-xl w-60 p-4 text-md">
+        {/* allow linebreaks */}
+        <h4 className="text-white bg-black rounded-xl w-60 p-4 text-md whitespace-pre-wrap break-words">
           {message}
         </h4>
         <div className="h-full w-32 flex">

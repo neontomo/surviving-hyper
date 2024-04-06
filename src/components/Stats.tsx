@@ -3,12 +3,15 @@ import React from 'react'
 export default function Stats({
   currentLevel,
   currentHealth,
-  objective
+  objective,
+  active
 }: {
   currentLevel: number
   currentHealth: number
   objective: string
+  active: boolean
 }) {
+  if (!active) return null
   return (
     <div className="stats absolute z-10 top-0 left-0 w-full">
       <div className="flex flex-row justify-between px-8 py-8">

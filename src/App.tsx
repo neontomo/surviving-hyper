@@ -8,7 +8,7 @@ function App() {
   const [currentIntro, setCurrentIntro] = useState(1)
   const [introCompleted, setIntroCompleted] = useState(false)
   const [currentLevel, setCurrentLevel] = useState(1)
-  const [currentHealth, setCurrentHealth] = useState(3)
+  const [currentHealth, setCurrentHealth] = useState(4)
   const [gameOver, setGameOver] = useState(false)
 
   useEffect(() => {
