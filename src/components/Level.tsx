@@ -32,6 +32,7 @@ export default function Level({
   const [levelCompleted, setLevelCompleted] = useState<boolean>(false)
   const [pausedGame, setPausedGame] = useState<boolean>(false)
   const [showCredits, setShowCredits] = useState<boolean>(false)
+  const [invincible, setInvincible] = useState<boolean>(false)
 
   function twoElementsCheckCollision(
     element1: HTMLElement,
@@ -74,8 +75,14 @@ export default function Level({
     })
 
     snowPiles.forEach((snow) => {
-      if (twoElementsCheckCollision(hero, snow)) {
-        snow.classList.add('invisible')
+      const snowTimeout = setTimeout(() => {
+        if (twoElementsCheckCollision(hero, snow)) {
+          snow.classList.add('invisible')
+        }
+      }, 200)
+
+      return () => {
+        clearTimeout(snowTimeout)
       }
     })
 
@@ -112,9 +119,10 @@ export default function Level({
     }
 
     if (enemyCollision > 0 && sofaCollisions === 0) {
+      if (invincible) return
       setPausedGame(true)
     }
-  }, [])
+  }, [invincible, setCurrentLevel])
 
   useEffect(() => {
     let animationFrameId: number
@@ -137,6 +145,9 @@ export default function Level({
           })
           setHeroDirection(0)
         })
+      }
+      if (event.key === 'i') {
+        setInvincible((prev) => !prev)
       }
     }
 
@@ -168,6 +179,7 @@ export default function Level({
   }, [onSofa])
 
   useEffect(() => {
+    // hit by enemy
     if (!pausedGame) return
     setCurrentLevel(currentLevel)
     setCurrentHealth((prev) => prev - 1)
@@ -184,7 +196,7 @@ export default function Level({
     return () => {
       clearTimeout(pausedTimeout)
     }
-  }, [pausedGame, currentLevel, setCurrentLevel, setCurrentHealth])
+  }, [pausedGame, currentLevel, setCurrentLevel, setCurrentHealth, invincible])
 
   useEffect(() => {
     if (currentHealth <= 0) {
@@ -214,7 +226,8 @@ export default function Level({
         currentLevel={currentLevel}
         currentHealth={currentHealth}
         objective={LevelCompletedMessage[currentLevel - 1].objective}
-        active={currentLevel < 5 && !levelCompleted}
+        active={!levelCompleted && !showCredits}
+        invincible={invincible}
       />
       <div>
         <Credits active={levelCompleted && currentLevel === 5 && showCredits} />

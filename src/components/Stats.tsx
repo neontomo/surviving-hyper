@@ -4,12 +4,14 @@ export default function Stats({
   currentLevel,
   currentHealth,
   objective,
-  active
+  active,
+  invincible
 }: {
   currentLevel: number
   currentHealth: number
   objective: string
   active: boolean
+  invincible: boolean
 }) {
   if (!active) return null
   return (
@@ -40,6 +42,12 @@ export default function Stats({
             <span>Objective:</span>
             <span className="break-words">{objective}</span>
           </div>
+          {invincible && (
+            <div className="flex flex-row text-start justify-start gap-2">
+              <span>Invincible:</span>
+              <span className="break-words">Yes</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

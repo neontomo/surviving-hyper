@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Button from './Button'
 
 type IntroProps = {
   currentIntro: number
@@ -31,11 +32,17 @@ export default function Intro({
         backgroundImage: `url('img/areas/level-0.webp')`
       }}
     >
-      <div className="fixed top-[-2000px]">
-        <img src="img/characters/hero1-loop.gif" alt="Hyper Island" />
-        <img src="img/characters/hero2-loop.gif" alt="Hyper Island" />
+      <div className="flex flex-col md:hidden text-white m-auto p-8 gap-8">
+        <h1 className="text-white text-5xl text-center">Surviving Hyper</h1>
+        <p className="text-2xl break-words">
+          To play this game, you need to be on a desktop computer. If you are on
+          a desktop computer, please resize your browser window to be wider.
+          Thank you!
+          <br />
+          <br />- The Hyper Island students
+        </p>
       </div>
-      <div className="flex flex-col m-auto items-center justify-evenly gap-8 h-[90%]">
+      <div className="hidden md:flex flex-col m-auto items-center justify-evenly gap-8 h-[90%]">
         {(currentIntro < 4 || currentIntro === 5) && (
           <>
             <h1 className="text-white text-8xl">Surviving Hyper</h1>
@@ -46,8 +53,7 @@ export default function Intro({
             />
 
             <div className="flex flex-row justify-center">
-              <button
-                className="py-4 px-8 font-sans text-xl border-4 border-black border-solid bg-white hover:bg-black hover:text-white transition-colors duration-200 ease-in-out cursor-pointer"
+              <Button
                 onClick={() => {
                   if (currentIntro === 5) {
                     setIntroCompleted(true)
@@ -66,7 +72,7 @@ export default function Intro({
                 {currentIntro === 5
                   ? "Nevermind, let's try again..."
                   : 'Continue...'}
-              </button>
+              </Button>
             </div>
           </>
         )}
