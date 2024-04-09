@@ -1,3 +1,4 @@
+// TODO: fix the intro to be responsive and not just for desktop and add second character
 import React, { useEffect, useState } from 'react'
 import Button from './Button'
 
@@ -30,8 +31,7 @@ export default function Intro({
       className="intro flex h-full w-full grow bg-cover bg-center"
       style={{
         backgroundImage: `url('img/areas/level-0.webp')`
-      }}
-    >
+      }}>
       <div className="flex flex-col md:hidden text-white m-auto p-8 gap-8">
         <h1 className="text-white text-5xl text-center">Surviving Hyper</h1>
         <p className="text-2xl break-words">
@@ -67,8 +67,7 @@ export default function Intro({
                     return
                   }
                   setCurrentIntro(currentIntro + 1)
-                }}
-              >
+                }}>
                 {currentIntro === 5
                   ? "Nevermind, let's try again..."
                   : 'Continue...'}
